@@ -1,6 +1,8 @@
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
 
 
 class ScrappingService:
@@ -8,7 +10,9 @@ class ScrappingService:
         options = Options()
         # options.add_argument("--headless")
         options.add_argument("--start-fullscreen")
-        driver = webdriver.Chrome(options=options)
+        driver = webdriver.Chrome(
+            service=Service(ChromeDriverManager().install())
+            , options=options)
         driver.get('chrome://settings/')
         driver.execute_script('chrome.settingsPrivate.setDefaultZoom(0.25);')
         return driver
@@ -80,6 +84,8 @@ class ScrappingService:
             for participant in participants:
                 if name in participant:
                     cellSearcher.clear()
-                    cellSearcher.send_keys("{0}{1}{2}TRUE{2}".format(ColCheckboxIndex, Rowindex, enterCode))
+                    cellSearcher.send_keys(
+                        "{0}{1}{2}TRUE{2}".format(ColCheckboxIndex, Rowindex,
+                                                  enterCode))
                     break
             Rowindex += 1
